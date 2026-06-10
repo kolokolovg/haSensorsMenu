@@ -1,0 +1,45 @@
+// Menu
+"home_climate" = "Home Climate";
+"refresh_now" = "Refresh Now";
+"settings" = "Settings...";
+"quit" = "Quit";
+
+// Room View
+"temperature" = "Temperature";
+"humidity" = "Humidity";
+
+// Settings
+"connection" = "Connection";
+"rooms" = "Rooms";
+"language" = "Language";
+"close" = "Close";
+"save" = "Save";
+
+// Connection Settings
+"ha_server" = "Home Assistant Server";
+"server_address" = "Server Address";
+"access_token" = "Access Token";
+"data_update" = "Data Update";
+"polling_interval" = "Polling Interval";
+"sec" = "sec";
+"server_address_hint" = "Example: https://ha.example.com";
+
+// Rooms Settings
+"configured_rooms" = "Configured Rooms";
+"add" = "Add";
+"no_rooms" = "No configured rooms";
+"add_first_room" = "Add your first room to start tracking";
+"edit" = "Edit";
+"delete" = "Delete";
+
+// Add/Edit Room
+"add_room" = "Add Room";
+"edit_room" = "Edit Room";
+"name" = "Name";
+"cancel" = "Cancel";
+
+// Language Settings
+"language_settings" = "Language Settings";
+"select_language" = "Select Language";
+"russian" = "Russian";
+"english" = "English";

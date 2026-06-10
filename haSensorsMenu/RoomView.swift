@@ -2,18 +2,18 @@ import SwiftUI
 
 struct RoomView: View {
     let room: RoomDisplayData
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(room.name)
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             HStack(spacing: 0) {
                 Image(systemName: "thermometer")
                     .foregroundColor(.orange)
                     .frame(width: 20)
-                Text("Температура")
+                Text(L10n("temperature"))
                     .font(.system(.body, design: .monospaced))
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)
@@ -30,12 +30,12 @@ struct RoomView: View {
                     .foregroundColor(.secondary)
                     .frame(width: 25, alignment: .center)
             }
-            
+
             HStack(spacing: 0) {
                 Image(systemName: "drop.fill")
                     .foregroundColor(.blue)
                     .frame(width: 20)
-                Text("Влажность")
+                Text(L10n("humidity"))
                     .font(.system(.body, design: .monospaced))
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)

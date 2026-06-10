@@ -3,28 +3,28 @@ import SwiftUI
 struct RoomsSettingsView: View {
     @ObservedObject var settings: SettingsManager
     @State private var showingAddRoom = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Настроенные комнаты")
+                Text(L10n("configured_rooms"))
                     .font(.headline)
                 Spacer()
                 Button(action: { showingAddRoom = true }) {
-                    Label("Добавить", systemImage: "plus")
+                    Label(L10n("add"), systemImage: "plus")
                 }
                 .buttonStyle(.borderedProminent)
             }
-            
+
             if settings.rooms.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "house")
                         .font(.system(size: 48))
                         .foregroundColor(.secondary)
-                    Text("Нет настроенных комнат")
+                    Text(L10n("no_rooms"))
                         .font(.headline)
                         .foregroundColor(.secondary)
-                    Text("Добавьте первую комнату, чтобы начать отслеживание")
+                    Text(L10n("add_first_room"))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -51,13 +51,13 @@ struct RoomConfigRow: View {
     @Binding var room: RoomConfig
     @ObservedObject var settings: SettingsManager
     @State private var showingEdit = false
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "house.fill")
                 .foregroundColor(.accentColor)
                 .frame(width: 32)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(room.name)
                     .font(.headline)
@@ -70,15 +70,15 @@ struct RoomConfigRow: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Spacer()
-            
+
             Button(action: { showingEdit = true }) {
                 Image(systemName: "pencil.circle")
             }
             .buttonStyle(.borderless)
-            .help("Редактировать")
-            
+            .help(L10n("edit"))
+
             Button(action: {
                 withAnimation {
                     settings.rooms.removeAll { $0.id == room.id }
@@ -88,7 +88,7 @@ struct RoomConfigRow: View {
             }
             .buttonStyle(.borderless)
             .foregroundColor(.red)
-            .help("Удалить")
+            .help(L10n("delete"))
         }
         .padding(.vertical, 12)
         .sheet(isPresented: $showingEdit) {

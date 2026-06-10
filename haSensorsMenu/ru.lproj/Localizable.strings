@@ -1,0 +1,45 @@
+// Menu
+"home_climate" = "Климат в доме";
+"refresh_now" = "Обновить сейчас";
+"settings" = "Настройки...";
+"quit" = "Выход";
+
+// Room View
+"temperature" = "Температура";
+"humidity" = "Влажность";
+
+// Settings
+"connection" = "Подключение";
+"rooms" = "Комнаты";
+"language" = "Язык";
+"close" = "Закрыть";
+"save" = "Сохранить";
+
+// Connection Settings
+"ha_server" = "Сервер Home Assistant";
+"server_address" = "Адрес сервера";
+"access_token" = "Токен доступа";
+"data_update" = "Обновление данных";
+"polling_interval" = "Интервал опроса";
+"sec" = "сек";
+"server_address_hint" = "Например: https://ha.example.com";
+
+// Rooms Settings
+"configured_rooms" = "Настроенные комнаты";
+"add" = "Добавить";
+"no_rooms" = "Нет настроенных комнат";
+"add_first_room" = "Добавьте первую комнату, чтобы начать отслеживание";
+"edit" = "Редактировать";
+"delete" = "Удалить";
+
+// Add/Edit Room
+"add_room" = "Добавление комнаты";
+"edit_room" = "Редактирование комнаты";
+"name" = "Название";
+"cancel" = "Отмена";
+
+// Language Settings
+"language_settings" = "Настройки языка";
+"select_language" = "Выберите язык";
+"russian" = "Русский";
+"english" = "English";

@@ -6,7 +6,7 @@ struct MenuContentView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Климат в доме")
+                Text(L10n("home_climate"))
                     .font(.headline)
                 Spacer()
                 Image(systemName: store.isUpdating ? "arrow.triangle.2.circlepath" : "checkmark.circle.fill")
@@ -44,7 +44,7 @@ struct MenuContentView: View {
             }) {
                 HStack {
                     Image(systemName: "arrow.clockwise")
-                    Text("Обновить сейчас")
+                    Text(L10n("refresh_now"))
                 }
             }
             .buttonStyle(.plain)
@@ -52,7 +52,7 @@ struct MenuContentView: View {
 
             Divider()
 
-            Button("Настройки...") {
+            Button(L10n("settings")) {
                 SettingsWindowManager.shared.open(settings: store.settings, store: store)
             }
             .buttonStyle(.plain)
@@ -60,7 +60,7 @@ struct MenuContentView: View {
 
             Divider()
 
-            Button("Выход") {
+            Button(L10n("quit")) {
                 NSApplication.shared.terminate(nil)
             }
             .buttonStyle(.plain)

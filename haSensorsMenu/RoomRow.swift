@@ -1,29 +1,21 @@
-//
-//  RoomRow.swift
-//  haSensorsMenu
-//
-//  Created by gleb on 10.06.2026.
-//
-
-
 import SwiftUI
 
 struct RoomRow: View {
     @Binding var room: RoomConfig
     @ObservedObject var settings: SettingsManager
     @State private var showingEdit = false
-    
+
     var body: some View {
         HStack {
             Text(room.name)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            
+
             Button(action: { showingEdit = true }) {
                 Image(systemName: "pencil.circle")
             }
             .buttonStyle(.borderless)
-            .help("Редактировать")
-            
+            .help(L10n("edit"))
+
             Button(action: {
                 settings.rooms.removeAll { $0.id == room.id }
             }) {
@@ -31,7 +23,7 @@ struct RoomRow: View {
             }
             .buttonStyle(.borderless)
             .foregroundColor(.red)
-            .help("Удалить")
+            .help(L10n("delete"))
         }
         .padding(.vertical, 4)
         .sheet(isPresented: $showingEdit) {

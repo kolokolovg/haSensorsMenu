@@ -7,14 +7,25 @@ struct SettingsView: View {
     @State private var selectedTab = SettingsTab.connection
 
     enum SettingsTab: String, CaseIterable, Identifiable {
-        case connection = "Подключение"
-        case rooms = "Комнаты"
+        case connection
+        case rooms
+        case language
 
         var id: String { rawValue }
+        
+        var displayName: String {
+            switch self {
+            case .connection: return L10n("connection")
+            case .rooms: return L10n("rooms")
+            case .language: return L10n("language")
+            }
+        }
+        
         var icon: String {
             switch self {
             case .connection: return "server.rack"
             case .rooms: return "house"
+            case .language: return "globe"
             }
         }
     }
@@ -23,7 +34,7 @@ struct SettingsView: View {
         NavigationSplitView {
             List(selection: $selectedTab) {
                 ForEach(SettingsTab.allCases) { tab in
-                    Label(tab.rawValue, systemImage: tab.icon)
+                    Label(tab.displayName, systemImage: tab.icon)
                         .tag(tab)
                 }
             }
@@ -38,6 +49,8 @@ struct SettingsView: View {
                         ConnectionSettingsView(settings: settings)
                     case .rooms:
                         RoomsSettingsView(settings: settings)
+                    case .language:
+                        LanguageSettingsView(settings: settings)
                     }
                 }
                 .padding(20)
@@ -45,16 +58,16 @@ struct SettingsView: View {
             }
         }
         .frame(minWidth: 700, minHeight: 450)
-        .navigationTitle(selectedTab.rawValue)
+        .navigationTitle(selectedTab.displayName)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Закрыть") {
+                Button(L10n("close")) {
                     dismiss()
                 }
                 .keyboardShortcut(.escape, modifiers: [])
             }
             ToolbarItem(placement: .primaryAction) {
-                Button("Сохранить") {
+                Button(L10n("save")) {
                     settings.save()
                     store.rebuildRoomsData()
                     Task { await store.fetchAllSensors() }
