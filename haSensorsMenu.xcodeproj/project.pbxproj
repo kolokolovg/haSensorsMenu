@@ -10,22 +10,9 @@
 		F78CA5982FD94A2B007A6CD1 /* haSensorsMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = haSensorsMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F78CA5D22FD9854E007A6CD1 /* Exceptions for "haSensorsMenu" folder in "haSensorsMenu" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Untitled.swift,
-			);
-			target = F78CA5972FD94A2B007A6CD1 /* haSensorsMenu */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F78CA59A2FD94A2B007A6CD1 /* haSensorsMenu */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				F78CA5D22FD9854E007A6CD1 /* Exceptions for "haSensorsMenu" folder in "haSensorsMenu" target */,
-			);
 			path = haSensorsMenu;
 			sourceTree = "<group>";
 		};
