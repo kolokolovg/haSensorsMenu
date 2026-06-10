@@ -43,3 +43,15 @@
 "select_language" = "Select Language";
 "russian" = "Russian";
 "english" = "English";
+
+// Appearance Settings
+"appearance" = "Appearance";
+"room_card_display" = "Room Card Display Style";
+"room_card_display_desc" = "Choose how to display sensor information in the menu";
+"room_card_style_compact" = "Compact";
+"room_card_style_compact_desc" = "Two sensors in a column with minimal spacing";
+"room_card_style_oneline" = "One Line";
+"room_card_style_oneline_desc" = "All information on one line (maximum compactness)";
+"card_style" = "Card Style";
+"preview" = "Preview";
+"example_room" = "Example Room";

@@ -43,3 +43,15 @@
 "select_language" = "Выберите язык";
 "russian" = "Русский";
 "english" = "English";
+
+// Appearance Settings
+"appearance" = "Внешний вид";
+"room_card_display" = "Стиль отображения комнат";
+"room_card_display_desc" = "Выберите, как отображать информацию о датчиках в меню";
+"room_card_style_compact" = "Компактный";
+"room_card_style_compact_desc" = "Два датчика в столбец, минимальные отступы";
+"room_card_style_oneline" = "В одну строку";
+"room_card_style_oneline_desc" = "Вся информация на одной строке (максимально компактно)";
+"card_style" = "Стиль карточки";
+"preview" = "Предпросмотр";
+"example_room" = "Пример комнаты";

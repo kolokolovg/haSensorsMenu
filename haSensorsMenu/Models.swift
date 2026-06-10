@@ -1,5 +1,28 @@
 import Foundation
 
+enum RoomCardStyle: String, CaseIterable, Codable {
+    case compact = "compact"
+    case oneLine = "oneLine"
+    
+    var displayName: String {
+        switch self {
+        case .compact:
+            return L10n("room_card_style_compact")
+        case .oneLine:
+            return L10n("room_card_style_oneline")
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .compact:
+            return L10n("room_card_style_compact_desc")
+        case .oneLine:
+            return L10n("room_card_style_oneline_desc")
+        }
+    }
+}
+
 struct RoomConfig: Identifiable, Codable {
     var id: UUID
     var name: String

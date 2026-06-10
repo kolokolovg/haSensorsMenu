@@ -4,7 +4,7 @@ struct MenuContentView: View {
     @ObservedObject var store: HASensorStore
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(L10n("home_climate"))
                     .font(.headline)
@@ -16,11 +16,11 @@ struct MenuContentView: View {
 
             Divider()
 
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
                 ForEach(store.roomsData, id: \.id) { room in
-                    RoomView(room: room)
+                    RoomView(room: room, settings: store.settings)
                     if room.name != store.roomsData.last?.name {
-                        Divider().padding(.vertical, 2)
+                        Divider().padding(.vertical, 0)
                     }
                 }
             }

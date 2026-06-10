@@ -12,6 +12,11 @@ class SettingsManager: ObservableObject {
             objectWillChange.send()
         }
     }
+    @Published var roomCardStyle: RoomCardStyle {
+        didSet {
+            UserDefaults.standard.set(roomCardStyle.rawValue, forKey: "ha_room_card_style")
+        }
+    }
 
     private let saveQueue = DispatchQueue(label: "com.hasensors.settings", qos: .background)
     private var cancellables = Set<AnyCancellable>()
@@ -29,11 +34,15 @@ class SettingsManager: ObservableObject {
         
         let loadedRooms = SettingsManager.loadRooms()
         
+        let cardStyleString = defaults.string(forKey: "ha_room_card_style") ?? "compact"
+        let loadedCardStyle = RoomCardStyle(rawValue: cardStyleString) ?? .compact
+        
         self.baseURL = loadedBaseURL
         self.token = loadedToken
         self.pollingInterval = loadedPollingInterval
         self.rooms = loadedRooms
         self.language = loadedLanguage
+        self.roomCardStyle = loadedCardStyle
 
         // Устанавливаем язык сразу при инициализации
         Bundle.setLanguage(loadedLanguage)
@@ -47,6 +56,7 @@ class SettingsManager: ObservableObject {
         $pollingInterval.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $rooms.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $language.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+        $roomCardStyle.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
     }
 
     func save() {
@@ -57,6 +67,7 @@ class SettingsManager: ObservableObject {
             defaults.set(self.token, forKey: "ha_token")
             defaults.set(self.pollingInterval, forKey: "ha_polling_interval")
             defaults.set(self.language, forKey: "ha_language")
+            defaults.set(self.roomCardStyle.rawValue, forKey: "ha_room_card_style")
             defaults.set(try? JSONEncoder().encode(self.rooms), forKey: "ha_rooms")
         }
     }

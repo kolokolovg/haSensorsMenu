@@ -10,6 +10,7 @@ struct SettingsView: View {
         case connection
         case rooms
         case language
+        case appearance
 
         var id: String { rawValue }
         
@@ -18,6 +19,7 @@ struct SettingsView: View {
             case .connection: return L10n("connection")
             case .rooms: return L10n("rooms")
             case .language: return L10n("language")
+            case .appearance: return L10n("appearance")
             }
         }
         
@@ -26,6 +28,7 @@ struct SettingsView: View {
             case .connection: return "server.rack"
             case .rooms: return "house"
             case .language: return "globe"
+            case .appearance: return "paintbrush"
             }
         }
     }
@@ -51,6 +54,8 @@ struct SettingsView: View {
                         RoomsSettingsView(settings: settings)
                     case .language:
                         LanguageSettingsView(settings: settings)
+                    case .appearance:
+                        AppearanceSettingsView(settings: settings)
                     }
                 }
                 .padding(20)
