@@ -4,56 +4,55 @@ struct RoomView: View {
     let room: RoomDisplayData
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            // Название комнаты
+        VStack(alignment: .leading, spacing: 8) {
             Text(room.name)
                 .font(.headline)
                 .foregroundColor(.primary)
             
-            // Температура
-            HStack(spacing: 12) {
+            HStack(spacing: 0) {
                 Image(systemName: "thermometer")
                     .foregroundColor(.orange)
-                    .frame(width: 20, alignment: .center)
-                
+                    .frame(width: 20)
                 Text("Температура")
+                    .font(.system(.body, design: .monospaced))
+                    .fontWeight(.semibold)
                     .foregroundColor(.secondary)
-                    .frame(width: 100, alignment: .leading) // Фиксированная ширина
-                
+                    .frame(width: 100, alignment: .leading)
                 Spacer()
-                
-                HStack(spacing: 2) {
-                    Text(room.tempState?.state ?? "--")
-                        .font(.system(.body, design: .monospaced))
-                        .fontWeight(.semibold)
-                    Text(room.tempState?.attributes.unitOfMeasurement ?? "°C")
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                }
+                Text(room.tempState?.state ?? "--")
+                    .font(.system(.body, design: .monospaced))
+                    .fontWeight(.semibold)
+                    .frame(width: 60, alignment: .trailing)
+                    .monospacedDigit()
+                Text("°C")
+                    .font(.system(.body, design: .monospaced))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.secondary)
+                    .frame(width: 25, alignment: .center)
             }
             
-            // Влажность
-            HStack(spacing: 12) {
+            HStack(spacing: 0) {
                 Image(systemName: "drop.fill")
                     .foregroundColor(.blue)
-                    .frame(width: 20, alignment: .center)
-                
+                    .frame(width: 20)
                 Text("Влажность")
+                    .font(.system(.body, design: .monospaced))
+                    .fontWeight(.semibold)
                     .foregroundColor(.secondary)
-                    .frame(width: 100, alignment: .leading) // Фиксированная ширина
-                
+                    .frame(width: 100, alignment: .leading)
                 Spacer()
-                
-                HStack(spacing: 2) {
-                    Text(room.humidityState?.state ?? "--")
-                        .font(.system(.body, design: .monospaced))
-                        .fontWeight(.semibold)
-                    Text(room.humidityState?.attributes.unitOfMeasurement ?? "%")
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                }
+                Text(room.humidityState?.state ?? "--")
+                    .font(.system(.body, design: .monospaced))
+                    .fontWeight(.semibold)
+                    .frame(width: 60, alignment: .trailing)
+                    .monospacedDigit()
+                Text("%")
+                    .font(.system(.body, design: .monospaced))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.secondary)
+                    .frame(width: 25, alignment: .center)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
     }
 }

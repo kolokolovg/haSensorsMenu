@@ -19,7 +19,7 @@ class HASensorStore: ObservableObject {
     @Published var lastUpdated: String = "Никогда"
     
     private var timerTask: Task<Void, Never>?
-    private let settings: SettingsManager
+    let settings: SettingsManager // Делаем public, чтобы MenuContentView мог его передать
     
     private lazy var urlSession: URLSession = {
         let config = URLSessionConfiguration.default
@@ -85,6 +85,7 @@ class HASensorStore: ObservableObject {
             }
         }
         
+        // Чистое обновление массива. SwiftUI сам отследит изменение @Published
         var newRoomsData: [RoomDisplayData] = []
         for config in self.settings.rooms {
             let displayRoom = RoomDisplayData(
@@ -97,9 +98,6 @@ class HASensorStore: ObservableObject {
             )
             newRoomsData.append(displayRoom)
         }
-        
-        // Эта строка критически важна для обновления MenuBarExtra
-        self.objectWillChange.send()
         self.roomsData = newRoomsData
         
         isUpdating = false

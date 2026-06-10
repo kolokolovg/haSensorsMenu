@@ -1,44 +1,72 @@
 import Foundation
 import Combine
 
-@MainActor
 class SettingsManager: ObservableObject {
     @Published var baseURL: String
     @Published var token: String
-    @Published var rooms: [RoomConfig]
     @Published var pollingInterval: Int
-    
-    private let defaults = UserDefaults.standard
-    private let urlKey = "ha_base_url"
-    private let tokenKey = "ha_token"
-    private let roomsKey = "ha_rooms"
-    private let intervalKey = "ha_polling_interval"
-    
+    @Published var rooms: [RoomConfig]
+
+    private let saveQueue = DispatchQueue(label: "com.hasensors.settings", qos: .background)
+    private var cancellables = Set<AnyCancellable>()
+
     init() {
-        self.baseURL = defaults.string(forKey: urlKey) ?? "http://homeassistant.local:8123/api/states"
-        self.token = defaults.string(forKey: tokenKey) ?? "Bearer YOUR_TOKEN_HERE"
+        let defaults = UserDefaults.standard
         
-        let savedInterval = defaults.integer(forKey: intervalKey)
-        self.pollingInterval = (savedInterval >= 10) ? savedInterval : 60
+        let loadedBaseURL = defaults.string(forKey: "ha_base_url") ?? ""
+        let loadedToken = defaults.string(forKey: "ha_token") ?? ""
         
-        if let data = defaults.data(forKey: roomsKey),
-           let decoded = try? JSONDecoder().decode([RoomConfig].self, from: data) {
-            self.rooms = decoded
-        } else {
-            self.rooms = [
-                RoomConfig(name: "🛋️ Гостиная", tempID: "sensor.living_room_temp", humidityID: "sensor.living_room_humidity"),
-                RoomConfig(name: "🛏️ Спальня", tempID: "sensor.bedroom_temp", humidityID: "sensor.bedroom_humidity")
-            ]
-            save()
+        let interval = defaults.integer(forKey: "ha_polling_interval")
+        let loadedPollingInterval = interval == 0 ? 60 : interval
+        
+        print("Загружено: baseURL=\(loadedBaseURL), pollingInterval=\(loadedPollingInterval)")
+        
+        let loadedRooms = SettingsManager.loadRooms()
+        print("Загружено комнат: \(loadedRooms.count)")
+        
+        self.baseURL = loadedBaseURL
+        self.token = loadedToken
+        self.pollingInterval = loadedPollingInterval
+        self.rooms = loadedRooms
+
+        setupObservers()
+    }
+
+    private func setupObservers() {
+        $baseURL.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+        $token.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+        $pollingInterval.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+        $rooms.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+    }
+
+    func save() {
+        saveQueue.async { [weak self] in
+            guard let self = self else { return }
+            let defaults = UserDefaults.standard
+            defaults.set(self.baseURL, forKey: "ha_base_url")
+            defaults.set(self.token, forKey: "ha_token")
+            defaults.set(self.pollingInterval, forKey: "ha_polling_interval")
+            defaults.set(try? JSONEncoder().encode(self.rooms), forKey: "ha_rooms")
+            print("Сохранено: baseURL=\(self.baseURL), rooms=\(self.rooms.count)")
         }
     }
-    
-    func save() {
-        defaults.set(baseURL, forKey: urlKey)
-        defaults.set(token, forKey: tokenKey)
-        defaults.set(pollingInterval, forKey: intervalKey)
-        if let encoded = try? JSONEncoder().encode(rooms) {
-            defaults.set(encoded, forKey: roomsKey)
+
+    private static func loadRooms() -> [RoomConfig] {
+        guard let data = UserDefaults.standard.data(forKey: "ha_rooms") else {
+            print("Данные комнат не найдены в UserDefaults")
+            return []
+        }
+        
+        print("Размер данных комнат: \(data.count) байт")
+        
+        do {
+            let rooms = try JSONDecoder().decode([RoomConfig].self, from: data)
+            print("Успешно загружено \(rooms.count) комнат")
+            return rooms
+        } catch {
+            print("Ошибка декодирования комнат: \(error)")
+            print("Данные: \(String(data: data, encoding: .utf8) ?? "не читаемо")")
+            return []
         }
     }
 }
