@@ -49,126 +49,160 @@ struct AppearanceSettingsView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(L10n("preview"))
                     .font(.headline)
-                
-                // Пример карточки
-                exampleRoomCard
+
+                menuPreview
+                    .frame(width: 260)
                     .padding(12)
                     .background(Color(.controlBackgroundColor))
                     .cornerRadius(6)
             }
         }
     }
-    
-    var exampleRoomCard: some View {
-        Group {
-            switch settings.roomCardStyle {
-            case .compact:
-                compactExample
-            case .oneLine:
-                oneLineExample
+
+    var menuPreview: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(L10n("switches"))
+                .font(.headline)
+
+            Divider()
+
+            HStack {
+                Image(systemName: "lightbulb.fill")
+                    .foregroundColor(.yellow)
+                    .frame(width: 20)
+
+                Text("Люстра")
+                    .font(.system(size: 14, weight: .medium))
+
+                Spacer()
+
+                Circle()
+                    .fill(Color.green)
+                    .frame(width: 11, height: 11)
+                    .overlay(
+                        Circle()
+                            .stroke(Color.green.opacity(0.5), lineWidth: 3)
+                    )
+            }
+            .padding(.vertical, 2)
+
+            Divider()
+
+            Text(L10n("home_climate"))
+                .font(.headline)
+
+            Divider()
+
+            Group {
+                switch settings.roomCardStyle {
+                case .compact:
+                    compactExample
+                case .oneLine:
+                    oneLineExample
+                }
             }
         }
     }
     
     var compactExample: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
             Text(L10n("example_room"))
                 .font(.headline)
                 .foregroundColor(.primary)
-            
+
             HStack(spacing: 0) {
                 Image(systemName: "thermometer")
                     .font(.caption)
                     .foregroundColor(.orange)
                     .frame(width: 20)
-                
+
                 Text(L10n("temperature"))
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .foregroundColor(.secondary)
-                    .frame(width: 70, alignment: .leading)
-                
+                    .frame(width: 150, alignment: .leading)
+
                 Spacer()
-                
+
                 Text("22")
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .monospacedDigit()
-                    .frame(width: 40, alignment: .trailing)
-                
+                    .frame(width: 45, alignment: .leading)
+
                 Text("°C")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
                     .frame(width: 20, alignment: .center)
             }
-            
+
             HStack(spacing: 0) {
                 Image(systemName: "drop.fill")
                     .font(.caption)
                     .foregroundColor(.blue)
                     .frame(width: 20)
-                
+
                 Text(L10n("humidity"))
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .foregroundColor(.secondary)
-                    .frame(width: 70, alignment: .leading)
-                
+                    .frame(width: 150, alignment: .leading)
+
                 Spacer()
-                
+
                 Text("60")
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .monospacedDigit()
-                    .frame(width: 40, alignment: .trailing)
-                
+                    .frame(width: 45, alignment: .leading)
+
                 Text("%")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
                     .frame(width: 20, alignment: .center)
             }
         }
         .padding(.vertical, 2)
     }
-    
+
     var oneLineExample: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 7) {
             Text("Сал")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 14, weight: .semibold))
                 .lineLimit(1)
-                .frame(maxWidth: 55, alignment: .leading)
-            
+                .frame(maxWidth: 60, alignment: .leading)
+
             Divider()
                 .frame(height: 16)
-            
+
             HStack(spacing: 2) {
                 Image(systemName: "thermometer")
                     .font(.caption)
                     .foregroundColor(.orange)
                     .frame(width: 12)
-                
+
                 Text("22")
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .monospacedDigit()
-                    .frame(width: 35, alignment: .trailing)
-                
+                    .frame(width: 45, alignment: .leading)
+
                 Text("°C")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
-                    .frame(width: 15)
+                    .frame(width: 18)
             }
-            
+
             HStack(spacing: 2) {
                 Image(systemName: "drop.fill")
                     .font(.caption)
                     .foregroundColor(.blue)
                     .frame(width: 12)
-                
+
                 Text("60")
-                    .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                    .font(.system(size: 14, weight: .semibold, design: .monospaced))
                     .monospacedDigit()
-                    .frame(width: 35, alignment: .trailing)
-                
+                    .frame(width: 45, alignment: .leading)
+
                 Text("%")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
-                    .frame(width: 10)
+                    .frame(width: 15)
             }
         }
         .padding(.vertical, 2)

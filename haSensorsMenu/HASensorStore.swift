@@ -15,6 +15,7 @@ class AllowAllCertificatesDelegate: NSObject, URLSessionDelegate {
 @MainActor
 class HASensorStore: ObservableObject {
     @Published var roomsData: [RoomDisplayData] = []
+    @Published var switchesData: [HASwitchDisplayData] = []
     @Published var isUpdating: Bool = false
     @Published var lastUpdated: String = "Никогда"
     
@@ -32,6 +33,7 @@ class HASensorStore: ObservableObject {
     init(settings: SettingsManager) {
         self.settings = settings
         rebuildRoomsData()
+        rebuildSwitchesData()
     }
     
     func rebuildRoomsData() {
@@ -41,6 +43,16 @@ class HASensorStore: ObservableObject {
                 name: config.name,
                 tempID: config.tempID,
                 humidityID: config.humidityID
+            )
+        }
+    }
+
+    func rebuildSwitchesData() {
+        switchesData = settings.switches.map { config in
+            HASwitchDisplayData(
+                id: config.id,
+                name: config.name,
+                entityID: config.entityID
             )
         }
     }
@@ -69,11 +81,14 @@ class HASensorStore: ObservableObject {
             allEntityIds.append(room.tempID)
             allEntityIds.append(room.humidityID)
         }
+        for switchConfig in self.switchesData {
+            allEntityIds.append(switchConfig.entityID)
+        }
         
         await withTaskGroup(of: (String, HASensor?).self) { group in
             for entityId in allEntityIds {
                 group.addTask {
-                    let sensor = await self.fetchSensor(id: entityId, token: self.settings.token, baseURL: self.settings.baseURL)
+                    let sensor = await self.fetchSensor(id: entityId, token: self.settings.token, apiBaseURL: self.settings.apiBaseURL)
                     return (entityId, sensor)
                 }
             }
@@ -85,7 +100,6 @@ class HASensorStore: ObservableObject {
             }
         }
         
-        // Чистое обновление массива. SwiftUI сам отследит изменение @Published
         var newRoomsData: [RoomDisplayData] = []
         for config in self.settings.rooms {
             let displayRoom = RoomDisplayData(
@@ -100,14 +114,47 @@ class HASensorStore: ObservableObject {
         }
         self.roomsData = newRoomsData
         
+        var newSwitchesData: [HASwitchDisplayData] = []
+        for config in self.settings.switches {
+            let sensor = fetchedSensors[config.entityID]
+            newSwitchesData.append(HASwitchDisplayData(
+                id: config.id,
+                name: config.name,
+                entityID: config.entityID,
+                isOn: sensor?.state == "on"
+            ))
+        }
+        self.switchesData = newSwitchesData
+        
         isUpdating = false
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
         self.lastUpdated = "Обновлено: \(formatter.string(from: Date()))"
     }
     
-    private func fetchSensor(id: String, token: String, baseURL: String) async -> HASensor? {
-        guard let url = URL(string: "\(baseURL)/\(id)") else { return nil }
+    func toggleSwitch(entityID: String) async {
+        let domain = entityID.components(separatedBy: ".").first ?? ""
+        guard let url = URL(string: "\(settings.apiBaseURL)/services/\(domain)/toggle") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let authHeader = settings.token.hasPrefix("Bearer ") ? settings.token : "Bearer \(settings.token)"
+        request.setValue(authHeader, forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: ["entity_id": entityID])
+        
+        do {
+            let (_, response) = try await urlSession.data(for: request)
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                if let index = switchesData.firstIndex(where: { $0.entityID == entityID }) {
+                    switchesData[index].isOn.toggle()
+                }
+            }
+        } catch {}
+    }
+    
+    private func fetchSensor(id: String, token: String, apiBaseURL: String) async -> HASensor? {
+        guard let url = URL(string: "\(apiBaseURL)/states/\(id)") else { return nil }
         
         var request = URLRequest(url: url)
         let authHeader = token.hasPrefix("Bearer ") ? token : "Bearer \(token)"

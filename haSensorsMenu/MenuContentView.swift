@@ -5,22 +5,35 @@ struct MenuContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(L10n("home_climate"))
+            // Switches section
+            if !store.switchesData.isEmpty {
+                Text(L10n("switches"))
                     .font(.headline)
-                Spacer()
-                Image(systemName: store.isUpdating ? "arrow.triangle.2.circlepath" : "checkmark.circle.fill")
-                    .foregroundColor(store.isUpdating ? .blue : .green)
-                    .font(.caption)
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(store.switchesData) { switchData in
+                        SwitchRowView(switchData: switchData, store: store)
+                    }
+                }
             }
 
-            Divider()
+            // Climate section
+            if !store.roomsData.isEmpty {
+                Divider()
 
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(store.roomsData, id: \.id) { room in
-                    RoomView(room: room, settings: store.settings)
-                    if room.name != store.roomsData.last?.name {
-                        Divider().padding(.vertical, 0)
+                Text(L10n("home_climate"))
+                    .font(.headline)
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(store.roomsData, id: \.id) { room in
+                        RoomView(room: room, settings: store.settings)
+                        if room.name != store.roomsData.last?.name {
+                            Divider().padding(.vertical, 0)
+                        }
                     }
                 }
             }

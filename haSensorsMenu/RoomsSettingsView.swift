@@ -52,6 +52,13 @@ struct RoomConfigRow: View {
     @ObservedObject var settings: SettingsManager
     @State private var showingEdit = false
 
+    private var index: Int {
+        settings.rooms.firstIndex(where: { $0.id == room.id }) ?? 0
+    }
+
+    private var isFirst: Bool { index == 0 }
+    private var isLast: Bool { index == settings.rooms.count - 1 }
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "house.fill")
@@ -72,6 +79,28 @@ struct RoomConfigRow: View {
             }
 
             Spacer()
+
+            Button(action: {
+                withAnimation {
+                    settings.rooms.move(fromOffsets: IndexSet(integer: index), toOffset: index - 1)
+                }
+            }) {
+                Image(systemName: "chevron.up")
+            }
+            .buttonStyle(.borderless)
+            .disabled(isFirst)
+            .help(L10n("edit"))
+
+            Button(action: {
+                withAnimation {
+                    settings.rooms.move(fromOffsets: IndexSet(integer: index), toOffset: index + 2)
+                }
+            }) {
+                Image(systemName: "chevron.down")
+            }
+            .buttonStyle(.borderless)
+            .disabled(isLast)
+            .help(L10n("edit"))
 
             Button(action: { showingEdit = true }) {
                 Image(systemName: "pencil.circle")

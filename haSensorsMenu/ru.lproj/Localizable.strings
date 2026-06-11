@@ -44,6 +44,15 @@
 "russian" = "Русский";
 "english" = "English";
 
+// Switches Settings
+"switches" = "Переключатели";
+"configured_switches" = "Настроенные переключатели";
+"add_switch" = "Добавить переключатель";
+"edit_switch" = "Редактировать переключатель";
+"entity_id" = "ID сущности";
+"no_switches" = "Нет настроенных переключателей";
+"add_first_switch" = "Добавьте первый переключатель";
+
 // Appearance Settings
 "appearance" = "Внешний вид";
 "room_card_display" = "Стиль отображения комнат";

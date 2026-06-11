@@ -9,6 +9,7 @@ struct SettingsView: View {
     enum SettingsTab: String, CaseIterable, Identifiable {
         case connection
         case rooms
+        case switches
         case language
         case appearance
 
@@ -18,6 +19,7 @@ struct SettingsView: View {
             switch self {
             case .connection: return L10n("connection")
             case .rooms: return L10n("rooms")
+            case .switches: return L10n("switches")
             case .language: return L10n("language")
             case .appearance: return L10n("appearance")
             }
@@ -27,6 +29,7 @@ struct SettingsView: View {
             switch self {
             case .connection: return "server.rack"
             case .rooms: return "house"
+            case .switches: return "togglepower"
             case .language: return "globe"
             case .appearance: return "paintbrush"
             }
@@ -52,6 +55,8 @@ struct SettingsView: View {
                         ConnectionSettingsView(settings: settings)
                     case .rooms:
                         RoomsSettingsView(settings: settings)
+                    case .switches:
+                        SwitchesSettingsView(settings: settings)
                     case .language:
                         LanguageSettingsView(settings: settings)
                     case .appearance:
@@ -75,6 +80,7 @@ struct SettingsView: View {
                 Button(L10n("save")) {
                     settings.save()
                     store.rebuildRoomsData()
+                    store.rebuildSwitchesData()
                     Task { await store.fetchAllSensors() }
                     dismiss()
                 }

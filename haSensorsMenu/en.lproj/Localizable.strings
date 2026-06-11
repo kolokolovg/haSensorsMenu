@@ -44,6 +44,15 @@
 "russian" = "Russian";
 "english" = "English";
 
+// Switches Settings
+"switches" = "Switches";
+"configured_switches" = "Configured Switches";
+"add_switch" = "Add Switch";
+"edit_switch" = "Edit Switch";
+"entity_id" = "Entity ID";
+"no_switches" = "No configured switches";
+"add_first_switch" = "Add your first switch";
+
 // Appearance Settings
 "appearance" = "Appearance";
 "room_card_display" = "Room Card Display Style";

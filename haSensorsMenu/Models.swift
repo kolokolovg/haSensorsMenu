@@ -59,6 +59,36 @@ struct HAAttributes: Codable {
     }
 }
 
+struct HASwitchConfig: Identifiable, Codable {
+    var id: UUID
+    var name: String
+    var entityID: String
+
+    init(id: UUID = UUID(), name: String, entityID: String) {
+        self.id = id
+        self.name = name
+        self.entityID = entityID
+    }
+}
+
+struct HASwitchDisplayData: Identifiable {
+    let id: UUID
+    let name: String
+    let entityID: String
+    var isOn: Bool
+
+    var domain: String {
+        entityID.components(separatedBy: ".").first ?? ""
+    }
+
+    init(id: UUID, name: String, entityID: String, isOn: Bool = false) {
+        self.id = id
+        self.name = name
+        self.entityID = entityID
+        self.isOn = isOn
+    }
+}
+
 struct RoomDisplayData: Identifiable {
     let id: String
     let name: String

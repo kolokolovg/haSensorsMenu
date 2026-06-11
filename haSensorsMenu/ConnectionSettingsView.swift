@@ -24,6 +24,17 @@ struct ConnectionSettingsView: View {
                         .textFieldStyle(.roundedBorder)
                         .frame(maxWidth: .infinity)
                 }
+
+                Divider()
+
+                HStack(spacing: 16) {
+                    Text("API Base URL")
+                        .frame(width: 140, alignment: .leading)
+                    TextField("", text: $settings.apiBaseURL)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(maxWidth: .infinity)
+                }
             }
 
             VStack(alignment: .leading, spacing: 12) {
