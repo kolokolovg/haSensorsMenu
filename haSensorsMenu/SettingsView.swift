@@ -4,6 +4,7 @@ struct SettingsView: View {
     @ObservedObject var settings: SettingsManager
     @ObservedObject var store: HASensorStore
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var languageManager: LanguageManager
     @State private var selectedTab = SettingsTab.connection
 
     enum SettingsTab: String, CaseIterable, Identifiable {
@@ -15,16 +16,6 @@ struct SettingsView: View {
 
         var id: String { rawValue }
         
-        var displayName: String {
-            switch self {
-            case .connection: return L10n("connection")
-            case .rooms: return L10n("rooms")
-            case .switches: return L10n("switches")
-            case .language: return L10n("language")
-            case .appearance: return L10n("appearance")
-            }
-        }
-        
         var icon: String {
             switch self {
             case .connection: return "server.rack"
@@ -35,12 +26,24 @@ struct SettingsView: View {
             }
         }
     }
+    
+    private func getTabName(_ tab: SettingsTab) -> String {
+        switch tab {
+        case .connection: return L10n("connection")
+        case .rooms: return L10n("rooms")
+        case .switches: return L10n("switches")
+        case .language: return L10n("language")
+        case .appearance: return L10n("appearance")
+        }
+    }
 
     var body: some View {
+        let _ = languageManager.language  // Создаёт зависимость для SwiftUI
+        
         NavigationSplitView {
             List(selection: $selectedTab) {
                 ForEach(SettingsTab.allCases) { tab in
-                    Label(tab.displayName, systemImage: tab.icon)
+                    Label(getTabName(tab), systemImage: tab.icon)
                         .tag(tab)
                 }
             }
@@ -68,7 +71,7 @@ struct SettingsView: View {
             }
         }
         .frame(minWidth: 700, minHeight: 450)
-        .navigationTitle(selectedTab.displayName)
+        .navigationTitle(getTabName(selectedTab))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n("close")) {

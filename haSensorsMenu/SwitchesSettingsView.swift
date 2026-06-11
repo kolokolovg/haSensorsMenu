@@ -84,7 +84,7 @@ struct SwitchConfigRow: View {
             }
             .buttonStyle(.borderless)
             .disabled(isFirst)
-            .help(L10n("edit"))
+            .help(L10n("move_up"))
 
             Button(action: {
                 withAnimation {
@@ -95,7 +95,7 @@ struct SwitchConfigRow: View {
             }
             .buttonStyle(.borderless)
             .disabled(isLast)
-            .help(L10n("edit"))
+            .help(L10n("move_down"))
 
             Button(action: { showingEdit = true }) {
                 Image(systemName: "pencil.circle")

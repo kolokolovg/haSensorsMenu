@@ -64,3 +64,12 @@
 "card_style" = "Card Style";
 "preview" = "Preview";
 "example_room" = "Example Room";
+"example_switch_name" = "Chandelier";
+"example_room_name_short" = "Hall";
+
+// Connection Settings - Additional
+"api_base_url" = "API Base URL";
+
+// Move buttons help
+"move_up" = "Move up";
+"move_down" = "Move down";

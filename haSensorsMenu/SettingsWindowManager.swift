@@ -6,7 +6,7 @@ class SettingsWindowManager {
     
     private var window: NSWindow?
     
-    func open(settings: SettingsManager, store: HASensorStore) {
+    func open(settings: SettingsManager, store: HASensorStore, languageManager: LanguageManager) {
         // 1. Делаем наше агент-приложение активным
         NSApp.activate(ignoringOtherApps: true)
         
@@ -25,7 +25,8 @@ class SettingsWindowManager {
             newWindow.isReleasedWhenClosed = false // Не уничтожать окно при закрытии, а скрывать
             
             // Оборачиваем наш SwiftUI View в AppKit
-            let hostingController = NSHostingController(rootView: SettingsView(settings: settings, store: store))
+            let hostingController = NSHostingController(rootView: SettingsView(settings: settings, store: store)
+                .environmentObject(languageManager))
             newWindow.contentView = hostingController.view
             
             newWindow.center()

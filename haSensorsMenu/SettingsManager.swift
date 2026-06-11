@@ -16,14 +16,6 @@ class SettingsManager: ObservableObject {
     @Published var pollingInterval: Int
     @Published var rooms: [RoomConfig]
     @Published var switches: [HASwitchConfig]
-    @Published var language: String {
-        didSet {
-            Bundle.setLanguage(language)
-            DispatchQueue.main.async { [weak self] in
-                self?.objectWillChange.send()
-            }
-        }
-    }
     @Published var roomCardStyle: RoomCardStyle {
         didSet {
             UserDefaults.standard.set(roomCardStyle.rawValue, forKey: "ha_room_card_style")
@@ -44,8 +36,6 @@ class SettingsManager: ObservableObject {
         let interval = defaults.integer(forKey: "ha_polling_interval")
         let loadedPollingInterval = interval == 0 ? 60 : interval
         
-        let loadedLanguage = defaults.string(forKey: "ha_language") ?? "ru"
-        
         let loadedRooms = SettingsManager.loadRooms()
         let loadedSwitches = SettingsManager.loadSwitches()
         
@@ -65,11 +55,7 @@ class SettingsManager: ObservableObject {
         self.pollingInterval = loadedPollingInterval
         self.rooms = loadedRooms
         self.switches = loadedSwitches
-        self.language = loadedLanguage
         self.roomCardStyle = loadedCardStyle
-
-        // Устанавливаем язык сразу при инициализации
-        Bundle.setLanguage(loadedLanguage)
         
         setupObservers()
     }
@@ -84,7 +70,6 @@ class SettingsManager: ObservableObject {
         $pollingInterval.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $rooms.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $switches.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
-        $language.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $roomCardStyle.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
     }
 
@@ -96,7 +81,6 @@ class SettingsManager: ObservableObject {
             defaults.set(self.apiBaseURL, forKey: "ha_api_base_url")
             defaults.set(self.token, forKey: "ha_token")
             defaults.set(self.pollingInterval, forKey: "ha_polling_interval")
-            defaults.set(self.language, forKey: "ha_language")
             defaults.set(self.roomCardStyle.rawValue, forKey: "ha_room_card_style")
             defaults.set(try? JSONEncoder().encode(self.rooms), forKey: "ha_rooms")
             defaults.set(try? JSONEncoder().encode(self.switches), forKey: "ha_switches")

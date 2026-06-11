@@ -66,7 +66,7 @@ struct MenuContentView: View {
             Divider()
 
             Button(L10n("settings")) {
-                SettingsWindowManager.shared.open(settings: store.settings, store: store)
+                SettingsWindowManager.shared.open(settings: store.settings, store: store, languageManager: AppState.shared.languageManager)
             }
             .buttonStyle(.plain)
             .padding(.bottom, 4)

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LanguageSettingsView: View {
     @ObservedObject var settings: SettingsManager
+    @EnvironmentObject var languageManager: LanguageManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -9,7 +10,7 @@ struct LanguageSettingsView: View {
                 Text(L10n("language_settings"))
                     .font(.headline)
                 
-                Picker(L10n("select_language"), selection: $settings.language) {
+                Picker(L10n("select_language"), selection: languageManager.languageBinding) {
                     Text(L10n("russian")).tag("ru")
                     Text(L10n("english")).tag("en")
                 }

@@ -28,7 +28,7 @@ struct ConnectionSettingsView: View {
                 Divider()
 
                 HStack(spacing: 16) {
-                    Text("API Base URL")
+                    Text(L10n("api_base_url"))
                         .frame(width: 140, alignment: .leading)
                     TextField("", text: $settings.apiBaseURL)
                         .textFieldStyle(.roundedBorder)

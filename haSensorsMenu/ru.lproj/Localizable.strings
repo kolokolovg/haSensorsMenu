@@ -64,3 +64,12 @@
 "card_style" = "Стиль карточки";
 "preview" = "Предпросмотр";
 "example_room" = "Пример комнаты";
+"example_switch_name" = "Люстра";
+"example_room_name_short" = "Зал";
+
+// Connection Settings - Additional
+"api_base_url" = "API Base URL";
+
+// Move buttons help
+"move_up" = "Переместить вверх";
+"move_down" = "Переместить вниз";

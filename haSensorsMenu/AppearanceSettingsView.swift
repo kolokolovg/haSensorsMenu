@@ -71,7 +71,7 @@ struct AppearanceSettingsView: View {
                     .foregroundColor(.yellow)
                     .frame(width: 20)
 
-                Text("Люстра")
+                Text(L10n("example_switch_name"))
                     .font(.system(size: 14, weight: .medium))
 
                 Spacer()
@@ -163,7 +163,7 @@ struct AppearanceSettingsView: View {
 
     var oneLineExample: some View {
         HStack(spacing: 7) {
-            Text("Сал")
+            Text(L10n("example_room_name_short"))
                 .font(.system(size: 14, weight: .semibold))
                 .lineLimit(1)
                 .frame(maxWidth: 60, alignment: .leading)
