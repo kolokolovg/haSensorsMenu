@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import ServiceManagement
 
 class SettingsManager: ObservableObject {
     @Published var baseURL: String {
@@ -21,8 +22,11 @@ class SettingsManager: ObservableObject {
             UserDefaults.standard.set(roomCardStyle.rawValue, forKey: "ha_room_card_style")
         }
     }
+    @Published var launchAtLogin: Bool
+    @Published var launchAtLoginErrorMessage: String?
 
     private var apiBaseURLManuallySet = false
+    private var isApplyingLoginItem = false
     private let saveQueue = DispatchQueue(label: "com.hasensors.settings", qos: .background)
     private var cancellables = Set<AnyCancellable>()
 
@@ -42,6 +46,8 @@ class SettingsManager: ObservableObject {
         let cardStyleString = defaults.string(forKey: "ha_room_card_style") ?? "compact"
         let loadedCardStyle = RoomCardStyle(rawValue: cardStyleString) ?? .compact
         
+        let loadedLaunchAtLogin = defaults.bool(forKey: "ha_launch_at_login")
+        
         self.baseURL = loadedBaseURL
         self.token = loadedToken
 
@@ -56,6 +62,8 @@ class SettingsManager: ObservableObject {
         self.rooms = loadedRooms
         self.switches = loadedSwitches
         self.roomCardStyle = loadedCardStyle
+        self.launchAtLogin = loadedLaunchAtLogin
+        self.launchAtLoginErrorMessage = nil
         
         setupObservers()
     }
@@ -71,6 +79,22 @@ class SettingsManager: ObservableObject {
         $rooms.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $switches.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $roomCardStyle.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+        $launchAtLogin.dropFirst().sink { [weak self] newValue in
+            guard let self = self, !self.isApplyingLoginItem else { return }
+            self.isApplyingLoginItem = true
+            defer { self.isApplyingLoginItem = false }
+            do {
+                if newValue {
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
+                }
+                UserDefaults.standard.set(newValue, forKey: "ha_launch_at_login")
+            } catch {
+                self.launchAtLoginErrorMessage = error.localizedDescription
+                self.launchAtLogin = !newValue
+            }
+        }.store(in: &cancellables)
     }
 
     func save() {
@@ -82,6 +106,7 @@ class SettingsManager: ObservableObject {
             defaults.set(self.token, forKey: "ha_token")
             defaults.set(self.pollingInterval, forKey: "ha_polling_interval")
             defaults.set(self.roomCardStyle.rawValue, forKey: "ha_room_card_style")
+            defaults.set(self.launchAtLogin, forKey: "ha_launch_at_login")
             defaults.set(try? JSONEncoder().encode(self.rooms), forKey: "ha_rooms")
             defaults.set(try? JSONEncoder().encode(self.switches), forKey: "ha_switches")
         }

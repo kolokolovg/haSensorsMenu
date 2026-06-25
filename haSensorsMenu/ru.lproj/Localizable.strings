@@ -73,3 +73,12 @@
 // Move buttons help
 "move_up" = "Переместить вверх";
 "move_down" = "Переместить вниз";
+
+// Launch at Login
+"launch_at_login" = "Запускать при входе в систему";
+"launch_at_login_desc" = "Автоматически запускать приложение при входе в систему";
+"launch_at_login_toggle" = "Запускать при входе";
+
+// Common
+"error" = "Ошибка";
+"ok" = "OK";

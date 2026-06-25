@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AppearanceSettingsView: View {
     @ObservedObject var settings: SettingsManager
+    @State private var showLoginItemAlert = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -55,6 +56,33 @@ struct AppearanceSettingsView: View {
                     .padding(12)
                     .background(Color(.controlBackgroundColor))
                     .cornerRadius(6)
+            }
+
+            Divider()
+
+            // Launch at Login
+            VStack(alignment: .leading, spacing: 8) {
+                Text(L10n("launch_at_login"))
+                    .font(.headline)
+                Text(L10n("launch_at_login_desc"))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Toggle(isOn: $settings.launchAtLogin) {
+                    Text(L10n("launch_at_login_toggle"))
+                }
+            }
+        }
+        .alert(L10n("error"), isPresented: $showLoginItemAlert) {
+            Button(L10n("ok")) {
+                settings.launchAtLoginErrorMessage = nil
+            }
+        } message: {
+            Text(settings.launchAtLoginErrorMessage ?? "")
+        }
+        .onChange(of: settings.launchAtLoginErrorMessage) { _, newValue in
+            if newValue != nil {
+                showLoginItemAlert = true
             }
         }
     }

@@ -73,3 +73,12 @@
 // Move buttons help
 "move_up" = "Move up";
 "move_down" = "Move down";
+
+// Launch at Login
+"launch_at_login" = "Launch at Login";
+"launch_at_login_desc" = "Automatically start the app when you log in";
+"launch_at_login_toggle" = "Launch at login";
+
+// Common
+"error" = "Error";
+"ok" = "OK";
