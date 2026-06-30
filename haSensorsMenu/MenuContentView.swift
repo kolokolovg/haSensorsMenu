@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MenuContentView: View {
     @ObservedObject var store: HASensorStore
+    @State private var showVoltageGraph = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -31,9 +32,24 @@ struct MenuContentView: View {
                         .font(.system(size: 14, weight: .semibold))
                     Spacer()
                     if let voltage = ups.voltageValue {
-                        Text(String(format: "%.1f", voltage))
-                            .font(.system(size: 14, weight: .semibold, design: .monospaced))
-                            .monospacedDigit()
+                        Button {
+                            showVoltageGraph = true
+                        } label: {
+                            Text(String(format: "%.1f", voltage))
+                                .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                                .monospacedDigit()
+                        }
+                        .buttonStyle(.plain)
+                        .help(L10n("voltage_history"))
+                        .popover(isPresented: $showVoltageGraph) {
+                            VoltageGraphView(
+                                samples: store.voltageHistory.samples,
+                                minVoltage: ups.minVoltage,
+                                maxVoltage: ups.maxVoltage,
+                                name: ups.name,
+                                unit: ups.unit
+                            )
+                        }
                     } else {
                         Text("--")
                             .font(.system(size: 14, weight: .semibold, design: .monospaced))

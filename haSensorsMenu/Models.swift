@@ -131,6 +131,18 @@ struct UPSDisplayData: Identifiable {
     }
 }
 
+struct VoltageSample: Codable, Identifiable {
+    let id: UUID
+    let timestamp: Date
+    let value: Double
+
+    init(timestamp: Date = Date(), value: Double) {
+        self.id = UUID()
+        self.timestamp = timestamp
+        self.value = value
+    }
+}
+
 struct RoomDisplayData: Identifiable {
     let id: String
     let name: String

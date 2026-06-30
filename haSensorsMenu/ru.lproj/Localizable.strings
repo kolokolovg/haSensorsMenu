@@ -88,6 +88,11 @@
 "max_voltage" = "Макс. напряжение (В)";
 "enable_alerts" = "Включить оповещения";
 
+// Voltage Graph
+"voltage_history" = "История напряжения (1ч)";
+"voltage_legend" = "Напряжение";
+"no_voltage_data" = "Нет данных по напряжению";
+
 // Notifications
 "voltage_alert_title" = "ИБП: напряжение вне нормы";
 

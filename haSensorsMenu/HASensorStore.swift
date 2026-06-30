@@ -23,6 +23,7 @@ class HASensorStore: ObservableObject {
     private var timerTask: Task<Void, Never>?
     private var upsTimerTask: Task<Void, Never>?
     private var wasUPSOutOfRange = false
+    let voltageHistory = VoltageHistoryManager()
     let settings: SettingsManager // Делаем public, чтобы MenuContentView мог его передать
     
     private lazy var urlSession: URLSession = {
@@ -177,6 +178,10 @@ class HASensorStore: ObservableObject {
             maxVoltage: config.maxVoltage
         )
         self.upsData = newUPSData
+
+        if let voltage = newUPSData.voltageValue {
+            voltageHistory.appendSample(value: voltage)
+        }
 
         if config.alertsEnabled, let voltage = newUPSData.voltageValue, newUPSData.isOutOfRange {
             if !wasUPSOutOfRange {

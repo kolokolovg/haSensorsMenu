@@ -88,6 +88,11 @@
 "max_voltage" = "Max Voltage (V)";
 "enable_alerts" = "Enable alerts";
 
+// Voltage Graph
+"voltage_history" = "Voltage History (1h)";
+"voltage_legend" = "Voltage";
+"no_voltage_data" = "No voltage data yet";
+
 // Notifications
 "voltage_alert_title" = "UPS: Voltage out of range";
 
