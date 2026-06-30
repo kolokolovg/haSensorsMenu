@@ -79,6 +79,18 @@
 "launch_at_login_desc" = "Автоматически запускать приложение при входе в систему";
 "launch_at_login_toggle" = "Запускать при входе";
 
+// UPS Settings
+"ups" = "ИБП";
+"ups_settings" = "Настройки ИБП";
+"ups_entity_id" = "ID сущности ИБП";
+"ups_name" = "Название ИБП";
+"min_voltage" = "Мин. напряжение (В)";
+"max_voltage" = "Макс. напряжение (В)";
+"enable_alerts" = "Включить оповещения";
+
+// Notifications
+"voltage_alert_title" = "ИБП: напряжение вне нормы";
+
 // Common
 "error" = "Ошибка";
 "ok" = "OK";

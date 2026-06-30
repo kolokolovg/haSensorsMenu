@@ -55,5 +55,16 @@ final class StatusBarManager {
         let symbol = store.isUpdating ? "arrow.triangle.2.circlepath" : "house.fill"
         statusItem.button?.image = NSImage(systemSymbolName: symbol, accessibilityDescription: nil)
         statusItem.button?.image?.isTemplate = true
+
+        if !store.isUpdating, let ups = store.upsData, let voltage = ups.voltageValue {
+            let text = String(format: " %.1f%@", voltage, ups.unit)
+            let attr: [NSAttributedString.Key: Any] = [
+                .foregroundColor: ups.isOutOfRange ? NSColor.systemRed : NSColor.labelColor,
+                .font: NSFont.monospacedDigitSystemFont(ofSize: NSFont.systemFontSize, weight: .medium)
+            ]
+            statusItem.button?.attributedTitle = NSAttributedString(string: text, attributes: attr)
+        } else {
+            statusItem.button?.attributedTitle = NSAttributedString(string: "")
+        }
     }
 }

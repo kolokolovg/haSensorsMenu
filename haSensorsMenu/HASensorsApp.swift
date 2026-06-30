@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusBar: StatusBarManager?
@@ -7,15 +8,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
 
+        UNUserNotificationCenter.current().delegate = self
+
         let settings = SettingsManager()
         let store = HASensorStore(settings: settings)
         let languageManager = LanguageManager()
+        NotificationManager.requestAuthorization()
         statusBar = StatusBarManager(store: store, settings: settings)
         store.startFetching()
 
         AppState.shared.settings = settings
         AppState.shared.store = store
         AppState.shared.languageManager = languageManager
+    }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound])
     }
 }
 

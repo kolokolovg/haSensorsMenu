@@ -1,12 +1,15 @@
 # haSensorsMenu
 
-macOS приложение для строки меню, отображающее датчики температуры, влажности и переключатели из Home Assistant.
+> Разработано нейросетью · Developed by AI
+
+macOS приложение для строки меню, отображающее датчики температуры, влажности, переключатели и напряжение ИБП из Home Assistant.
 
 ## Возможности
 
 - Отображение температуры и влажности из настроенных комнат
 - Интерактивные переключатели (`light.*`, `switch.*`) — клик отправляет toggle в Home Assistant
 - Два стиля отображения комнат: Compact (две строки) и One Line (всё в одной строке)
+- Мониторинг входного напряжения ИБП с отображением в строке меню и уведомлениями при выходе за пределы
 - Настройка комнат и переключателей через окно настроек
 - Сортировка элементов с помощью кнопок ▲/▼ в настройках
 - Настраиваемый интервал опроса (10–300 секунд)
@@ -50,6 +53,20 @@ macOS приложение для строки меню, отображающе�
 3. Укажите название и entity_id (например, `light.zal_fonar` или `switch.pere`)
 
 Работает для любых сущностей Home Assistant, поддерживающих сервис `toggle` (`light.*`, `switch.*`, `fan.*`, `cover.*` и т.д.).
+
+### Настройка ИБП
+
+Вкладка **UPS** в настройках:
+
+| Поле | Описание | По умолчанию |
+|------|----------|--------------|
+| **UPS Entity ID** | ID сенсора входного напряжения ИБП | `sensor.ups_input_voltage` |
+| **UPS Name** | Отображаемое имя | `UPS` |
+| **Min Voltage (V)** | Минимальный порог напряжения | `210` |
+| **Max Voltage (V)** | Максимальный порог напряжения | `245` |
+| **Enable alerts** | Вкл/выкл уведомления при выходе за пределы | Вкл |
+
+Напряжение ИБП отображается в строке меню рядом с иконкой дома и обновляется каждые 10 секунд (независимо от основного интервала опроса).
 
 ### Стиль отображения
 
@@ -95,6 +112,8 @@ haSensorsMenu/
     ├── MenuContentView.swift     # Основное вью меню
     ├── RoomView.swift            # Карточка комнаты
     ├── SwitchRowView.swift       # Строка переключателя
+    ├── UPSSettingsView.swift     # Настройки ИБП
+    ├── NotificationManager.swift # Локальные уведомления
     ├── RoomsSettingsView.swift   # Настройки комнат (+ Add/Edit)
     ├── SwitchesSettingsView.swift # Настройки переключателей
     ├── ConnectionSettingsView.swift # Настройки подключения
@@ -113,13 +132,16 @@ MIT License — см. [LICENSE](LICENSE).
 
 # haSensorsMenu
 
-A macOS menu bar app that displays temperature, humidity sensors and interactive switches from Home Assistant.
+> Developed by AI · Разработано нейросетью
+
+A macOS menu bar app that displays temperature, humidity sensors, switches and UPS input voltage from Home Assistant.
 
 ## Features
 
 - Temperature and humidity display for configured rooms
 - Interactive switches (`light.*`, `switch.*`) — click sends a toggle command to Home Assistant
 - Two room display styles: Compact (two-line) and One Line (all in one row)
+- UPS input voltage monitoring displayed in the menu bar with alerts when out of range
 - Room and switch configuration via a settings window
 - Reorder items with ▲/▼ buttons in settings
 - Configurable polling interval (10–300 seconds)
@@ -163,6 +185,20 @@ A macOS menu bar app that displays temperature, humidity sensors and interactive
 3. Enter a name and entity_id (e.g. `light.zal_fonar` or `switch.pere`)
 
 Works with any Home Assistant entity that supports the `toggle` service (`light.*`, `switch.*`, `fan.*`, `cover.*`, etc.).
+
+### UPS Settings
+
+The **UPS** tab in settings:
+
+| Field | Description | Default |
+|-------|-------------|---------|
+| **UPS Entity ID** | UPS input voltage sensor entity ID | `sensor.ups_input_voltage` |
+| **UPS Name** | Display name | `UPS` |
+| **Min Voltage (V)** | Voltage lower threshold | `210` |
+| **Max Voltage (V)** | Voltage upper threshold | `245` |
+| **Enable alerts** | Toggle notifications when voltage is out of range | On |
+
+The voltage value is shown in the menu bar next to the house icon and updates every 10 seconds (independently from the main polling interval).
 
 ### Display style
 
@@ -208,6 +244,8 @@ haSensorsMenu/
     ├── MenuContentView.swift     # Main popover content
     ├── RoomView.swift            # Room card view
     ├── SwitchRowView.swift       # Switch toggle row
+    ├── UPSSettingsView.swift     # UPS settings
+    ├── NotificationManager.swift # Local notifications
     ├── RoomsSettingsView.swift   # Room settings (+ Add/Edit)
     ├── SwitchesSettingsView.swift # Switch settings
     ├── ConnectionSettingsView.swift # Connection settings

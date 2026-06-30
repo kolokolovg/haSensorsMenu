@@ -11,6 +11,7 @@ struct SettingsView: View {
         case connection
         case rooms
         case switches
+        case ups
         case language
         case appearance
 
@@ -21,6 +22,7 @@ struct SettingsView: View {
             case .connection: return "server.rack"
             case .rooms: return "house"
             case .switches: return "togglepower"
+            case .ups: return "bolt.fill"
             case .language: return "globe"
             case .appearance: return "paintbrush"
             }
@@ -32,6 +34,7 @@ struct SettingsView: View {
         case .connection: return L10n("connection")
         case .rooms: return L10n("rooms")
         case .switches: return L10n("switches")
+        case .ups: return L10n("ups")
         case .language: return L10n("language")
         case .appearance: return L10n("appearance")
         }
@@ -60,6 +63,8 @@ struct SettingsView: View {
                         RoomsSettingsView(settings: settings)
                     case .switches:
                         SwitchesSettingsView(settings: settings)
+                    case .ups:
+                        UPSSettingsView(settings: settings)
                     case .language:
                         LanguageSettingsView(settings: settings)
                     case .appearance:

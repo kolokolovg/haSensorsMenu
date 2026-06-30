@@ -22,6 +22,7 @@ class SettingsManager: ObservableObject {
             UserDefaults.standard.set(roomCardStyle.rawValue, forKey: "ha_room_card_style")
         }
     }
+    @Published var upsConfig: UPSConfig
     @Published var launchAtLogin: Bool
     @Published var launchAtLoginErrorMessage: String?
 
@@ -46,8 +47,10 @@ class SettingsManager: ObservableObject {
         let cardStyleString = defaults.string(forKey: "ha_room_card_style") ?? "compact"
         let loadedCardStyle = RoomCardStyle(rawValue: cardStyleString) ?? .compact
         
+        let loadedUPSConfig = SettingsManager.loadUPSConfig()
         let loadedLaunchAtLogin = defaults.bool(forKey: "ha_launch_at_login")
         
+        self.upsConfig = loadedUPSConfig
         self.baseURL = loadedBaseURL
         self.token = loadedToken
 
@@ -78,6 +81,7 @@ class SettingsManager: ObservableObject {
         $pollingInterval.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $rooms.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $switches.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
+        $upsConfig.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $roomCardStyle.dropFirst().sink { [weak self] _ in self?.save() }.store(in: &cancellables)
         $launchAtLogin.dropFirst().sink { [weak self] newValue in
             guard let self = self, !self.isApplyingLoginItem else { return }
@@ -109,6 +113,7 @@ class SettingsManager: ObservableObject {
             defaults.set(self.launchAtLogin, forKey: "ha_launch_at_login")
             defaults.set(try? JSONEncoder().encode(self.rooms), forKey: "ha_rooms")
             defaults.set(try? JSONEncoder().encode(self.switches), forKey: "ha_switches")
+            defaults.set(try? JSONEncoder().encode(self.upsConfig), forKey: "ha_ups_config")
         }
     }
 
@@ -143,5 +148,13 @@ class SettingsManager: ObservableObject {
         } catch {
             return []
         }
+    }
+
+    private static func loadUPSConfig() -> UPSConfig {
+        guard let data = UserDefaults.standard.data(forKey: "ha_ups_config"),
+              let config = try? JSONDecoder().decode(UPSConfig.self, from: data) else {
+            return UPSConfig()
+        }
+        return config
     }
 }
