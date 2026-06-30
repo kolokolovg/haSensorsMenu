@@ -89,6 +89,48 @@ struct HASwitchDisplayData: Identifiable {
     }
 }
 
+struct UPSConfig: Codable {
+    var id: UUID
+    var name: String
+    var entityID: String
+    var minVoltage: Double
+    var maxVoltage: Double
+    var alertsEnabled: Bool
+
+    init(id: UUID = UUID(), name: String = "UPS", entityID: String = "sensor.ups_input_voltage",
+         minVoltage: Double = 210, maxVoltage: Double = 245, alertsEnabled: Bool = true) {
+        self.id = id
+        self.name = name
+        self.entityID = entityID
+        self.minVoltage = minVoltage
+        self.maxVoltage = maxVoltage
+        self.alertsEnabled = alertsEnabled
+    }
+}
+
+struct UPSDisplayData: Identifiable {
+    let id: UUID
+    let name: String
+    let entityID: String
+    let state: HASensor?
+    let minVoltage: Double
+    let maxVoltage: Double
+
+    var voltageValue: Double? {
+        guard let stateStr = state?.state, let value = Double(stateStr) else { return nil }
+        return value
+    }
+
+    var unit: String {
+        state?.attributes.unitOfMeasurement ?? "V"
+    }
+
+    var isOutOfRange: Bool {
+        guard let value = voltageValue else { return false }
+        return value < minVoltage || value > maxVoltage
+    }
+}
+
 struct RoomDisplayData: Identifiable {
     let id: String
     let name: String

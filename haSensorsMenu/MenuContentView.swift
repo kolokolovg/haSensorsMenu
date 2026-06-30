@@ -19,6 +19,36 @@ struct MenuContentView: View {
                 }
             }
 
+            // UPS section
+            if let ups = store.upsData {
+                Divider()
+
+                HStack {
+                    Image(systemName: "bolt.fill")
+                        .foregroundColor(ups.isOutOfRange ? .red : .yellow)
+                        .frame(width: 20)
+                    Text(ups.name)
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                    if let voltage = ups.voltageValue {
+                        Text(String(format: "%.1f", voltage))
+                            .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                            .monospacedDigit()
+                    } else {
+                        Text("--")
+                            .font(.system(size: 14, weight: .semibold, design: .monospaced))
+                    }
+                    Text(ups.unit)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.secondary)
+                        .frame(width: 20)
+                    Circle()
+                        .fill(ups.isOutOfRange ? Color.red : Color.green)
+                        .frame(width: 8, height: 8)
+                }
+                .padding(.vertical, 2)
+            }
+
             // Climate section
             if !store.roomsData.isEmpty {
                 Divider()

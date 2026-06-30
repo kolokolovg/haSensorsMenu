@@ -79,6 +79,18 @@
 "launch_at_login_desc" = "Automatically start the app when you log in";
 "launch_at_login_toggle" = "Launch at login";
 
+// UPS Settings
+"ups" = "UPS";
+"ups_settings" = "UPS Settings";
+"ups_entity_id" = "UPS Entity ID";
+"ups_name" = "UPS Name";
+"min_voltage" = "Min Voltage (V)";
+"max_voltage" = "Max Voltage (V)";
+"enable_alerts" = "Enable alerts";
+
+// Notifications
+"voltage_alert_title" = "UPS: Voltage out of range";
+
 // Common
 "error" = "Error";
 "ok" = "OK";

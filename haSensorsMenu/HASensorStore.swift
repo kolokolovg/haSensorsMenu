@@ -16,10 +16,13 @@ class AllowAllCertificatesDelegate: NSObject, URLSessionDelegate {
 class HASensorStore: ObservableObject {
     @Published var roomsData: [RoomDisplayData] = []
     @Published var switchesData: [HASwitchDisplayData] = []
+    @Published var upsData: UPSDisplayData?
     @Published var isUpdating: Bool = false
     @Published var lastUpdated: String = "Никогда"
     
     private var timerTask: Task<Void, Never>?
+    private var upsTimerTask: Task<Void, Never>?
+    private var wasUPSOutOfRange = false
     let settings: SettingsManager // Делаем public, чтобы MenuContentView мог его передать
     
     private lazy var urlSession: URLSession = {
@@ -34,6 +37,7 @@ class HASensorStore: ObservableObject {
         self.settings = settings
         rebuildRoomsData()
         rebuildSwitchesData()
+        rebuildUPSData()
     }
     
     func rebuildRoomsData() {
@@ -56,6 +60,18 @@ class HASensorStore: ObservableObject {
             )
         }
     }
+
+    func rebuildUPSData() {
+        let config = settings.upsConfig
+        upsData = UPSDisplayData(
+            id: config.id,
+            name: config.name,
+            entityID: config.entityID,
+            state: nil,
+            minVoltage: config.minVoltage,
+            maxVoltage: config.maxVoltage
+        )
+    }
     
     func startFetching() {
         Task { await fetchAllSensors() }
@@ -69,6 +85,8 @@ class HASensorStore: ObservableObject {
                 }
             }
         }
+
+        startUPSPolling()
     }
     
     func fetchAllSensors() async {
@@ -130,6 +148,50 @@ class HASensorStore: ObservableObject {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
         self.lastUpdated = "Обновлено: \(formatter.string(from: Date()))"
+    }
+
+    private func startUPSPolling() {
+        Task { await fetchUPS() }
+
+        upsTimerTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(10))
+                if !Task.isCancelled {
+                    await fetchUPS()
+                }
+            }
+        }
+    }
+
+    func fetchUPS() async {
+        let config = self.settings.upsConfig
+        guard !config.entityID.isEmpty else { return }
+
+        let sensor = await fetchSensor(id: config.entityID, token: settings.token, apiBaseURL: settings.apiBaseURL)
+        let newUPSData = UPSDisplayData(
+            id: config.id,
+            name: config.name,
+            entityID: config.entityID,
+            state: sensor,
+            minVoltage: config.minVoltage,
+            maxVoltage: config.maxVoltage
+        )
+        self.upsData = newUPSData
+
+        if config.alertsEnabled, let voltage = newUPSData.voltageValue, newUPSData.isOutOfRange {
+            if !wasUPSOutOfRange {
+                wasUPSOutOfRange = true
+                NotificationManager.sendVoltageAlert(
+                    name: config.name,
+                    voltage: voltage,
+                    unit: newUPSData.unit,
+                    min: config.minVoltage,
+                    max: config.maxVoltage
+                )
+            }
+        } else {
+            wasUPSOutOfRange = false
+        }
     }
     
     func toggleSwitch(entityID: String) async {
