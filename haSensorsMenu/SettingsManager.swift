@@ -102,18 +102,27 @@ class SettingsManager: ObservableObject {
     }
 
     func save() {
-        saveQueue.async { [weak self] in
-            guard let self = self else { return }
+        let baseURL = self.baseURL
+        let apiBaseURL = self.apiBaseURL
+        let token = self.token
+        let pollingInterval = self.pollingInterval
+        let roomCardStyle = self.roomCardStyle
+        let launchAtLogin = self.launchAtLogin
+        let roomsEncoded = try? JSONEncoder().encode(self.rooms)
+        let switchesEncoded = try? JSONEncoder().encode(self.switches)
+        let upsConfigEncoded = try? JSONEncoder().encode(self.upsConfig)
+
+        saveQueue.async {
             let defaults = UserDefaults.standard
-            defaults.set(self.baseURL, forKey: "ha_base_url")
-            defaults.set(self.apiBaseURL, forKey: "ha_api_base_url")
-            defaults.set(self.token, forKey: "ha_token")
-            defaults.set(self.pollingInterval, forKey: "ha_polling_interval")
-            defaults.set(self.roomCardStyle.rawValue, forKey: "ha_room_card_style")
-            defaults.set(self.launchAtLogin, forKey: "ha_launch_at_login")
-            defaults.set(try? JSONEncoder().encode(self.rooms), forKey: "ha_rooms")
-            defaults.set(try? JSONEncoder().encode(self.switches), forKey: "ha_switches")
-            defaults.set(try? JSONEncoder().encode(self.upsConfig), forKey: "ha_ups_config")
+            defaults.set(baseURL, forKey: "ha_base_url")
+            defaults.set(apiBaseURL, forKey: "ha_api_base_url")
+            defaults.set(token, forKey: "ha_token")
+            defaults.set(pollingInterval, forKey: "ha_polling_interval")
+            defaults.set(roomCardStyle.rawValue, forKey: "ha_room_card_style")
+            defaults.set(launchAtLogin, forKey: "ha_launch_at_login")
+            defaults.set(roomsEncoded, forKey: "ha_rooms")
+            defaults.set(switchesEncoded, forKey: "ha_switches")
+            defaults.set(upsConfigEncoded, forKey: "ha_ups_config")
         }
     }
 
