@@ -193,6 +193,14 @@ class HASensorStore: ObservableObject {
                     min: config.minVoltage,
                     max: config.maxVoltage
                 )
+                voltageHistory.retentionDays = config.alertHistoryDays ?? 7
+                voltageHistory.appendAlert(
+                    voltage: voltage,
+                    minVoltage: config.minVoltage,
+                    maxVoltage: config.maxVoltage,
+                    unit: newUPSData.unit,
+                    name: config.name
+                )
             }
         } else {
             wasUPSOutOfRange = false

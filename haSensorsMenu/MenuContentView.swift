@@ -47,7 +47,8 @@ struct MenuContentView: View {
                                 minVoltage: ups.minVoltage,
                                 maxVoltage: ups.maxVoltage,
                                 name: ups.name,
-                                unit: ups.unit
+                                unit: ups.unit,
+                                historyManager: store.voltageHistory
                             )
                         }
                     } else {

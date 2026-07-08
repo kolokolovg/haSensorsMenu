@@ -42,6 +42,19 @@ struct UPSSettingsView: View {
 
                 Toggle(L10n("enable_alerts"), isOn: $settings.upsConfig.alertsEnabled)
                     .padding(.top, 8)
+
+                HStack(spacing: 16) {
+                    Text(L10n("alert_history_retention"))
+                        .frame(width: 160, alignment: .leading)
+                    TextField("", value: Binding(
+                        get: { settings.upsConfig.alertHistoryDays ?? 7 },
+                        set: { settings.upsConfig.alertHistoryDays = $0 }
+                    ), format: .number)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 80)
+                    Text(L10n("days"))
+                        .foregroundColor(.secondary)
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

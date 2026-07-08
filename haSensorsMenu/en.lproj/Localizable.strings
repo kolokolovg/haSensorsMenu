@@ -87,14 +87,25 @@
 "min_voltage" = "Min Voltage (V)";
 "max_voltage" = "Max Voltage (V)";
 "enable_alerts" = "Enable alerts";
+"alert_history_retention" = "Alert history (days)";
+"days" = "days";
 
 // Voltage Graph
 "voltage_history" = "Voltage History (1h)";
-"voltage_legend" = "Voltage";
+"voltage_range" = "Range:";
 "no_voltage_data" = "No voltage data yet";
 
 // Notifications
 "voltage_alert_title" = "UPS: Voltage out of range";
+
+// Alert History
+"alert_history" = "Alert History";
+"alert_history_title" = "Alert History";
+"clear_history" = "Clear History";
+"clear_history_confirm" = "Are you sure you want to clear all alert history?";
+"no_alerts" = "No alerts recorded";
+"alert_below_min" = "Below minimum";
+"alert_above_max" = "Above maximum";
 
 // Common
 "error" = "Error";

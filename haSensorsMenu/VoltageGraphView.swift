@@ -7,6 +7,7 @@ struct VoltageGraphView: View {
     let maxVoltage: Double
     let name: String
     let unit: String
+    let historyManager: VoltageHistoryManager?
 
     private var yDomain: ClosedRange<Double> {
         let center = (minVoltage + maxVoltage) / 2
@@ -18,7 +19,7 @@ struct VoltageGraphView: View {
     var body: some View {
         VStack(spacing: 8) {
             Text(L10n("voltage_history"))
-                .font(.headline)
+                .font(.system(size: 14, weight: .semibold))
 
             if samples.isEmpty {
                 Text(L10n("no_voltage_data"))
@@ -32,8 +33,8 @@ struct VoltageGraphView: View {
                             y: .value("Voltage", sample.value)
                         )
                         .lineStyle(StrokeStyle(lineWidth: 2))
+                        .foregroundStyle(Color.blue)
                     }
-                    .foregroundStyle(by: .value("Type", "Voltage"))
 
                     RuleMark(y: .value("Min", minVoltage))
                         .foregroundStyle(.orange)
@@ -43,7 +44,6 @@ struct VoltageGraphView: View {
                         .foregroundStyle(.orange)
                         .lineStyle(StrokeStyle(dash: [4, 2]))
                 }
-                .chartForegroundStyleScale(["Voltage": Color.blue])
                 .chartYScale(domain: yDomain)
                 .chartPlotStyle { plotArea in
                     plotArea
@@ -67,28 +67,37 @@ struct VoltageGraphView: View {
                 .frame(height: 200)
             }
 
-            HStack(spacing: 16) {
+            HStack {
                 HStack(spacing: 4) {
-                    Circle()
-                        .fill(Color.blue)
-                        .frame(width: 8, height: 8)
-                    Text(L10n("voltage_legend"))
-                        .font(.caption)
+                    Text(L10n("voltage_range"))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.secondary)
-                }
-                HStack(spacing: 4) {
-                    RoundedRectangle(cornerRadius: 1)
-                        .fill(Color.orange)
-                        .frame(width: 14, height: 3)
                     Text("\(Int(minVoltage))–\(Int(maxVoltage)) \(unit)")
-                        .font(.caption)
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.secondary)
+                        .monospacedDigit()
                 }
                 Spacer()
                 Text(samples.last.map { String(format: "%.1f \(unit)", $0.value) } ?? "--")
-                    .font(.caption)
+                    .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
                     .monospacedDigit()
+            }
+
+            if let historyManager = historyManager {
+                Divider()
+
+                Button {
+                    AlertHistoryWindowManager.shared.open(historyManager: historyManager)
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 14, weight: .semibold))
+                        Text(L10n("alert_history"))
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                }
+                .buttonStyle(.plain)
             }
         }
         .padding()

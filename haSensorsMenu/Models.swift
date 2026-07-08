@@ -96,15 +96,18 @@ struct UPSConfig: Codable {
     var minVoltage: Double
     var maxVoltage: Double
     var alertsEnabled: Bool
+    var alertHistoryDays: Int?
 
     init(id: UUID = UUID(), name: String = "UPS", entityID: String = "sensor.ups_input_voltage",
-         minVoltage: Double = 210, maxVoltage: Double = 245, alertsEnabled: Bool = true) {
+         minVoltage: Double = 210, maxVoltage: Double = 245, alertsEnabled: Bool = true,
+         alertHistoryDays: Int? = 7) {
         self.id = id
         self.name = name
         self.entityID = entityID
         self.minVoltage = minVoltage
         self.maxVoltage = maxVoltage
         self.alertsEnabled = alertsEnabled
+        self.alertHistoryDays = alertHistoryDays
     }
 }
 
@@ -140,6 +143,29 @@ struct VoltageSample: Codable, Identifiable {
         self.id = UUID()
         self.timestamp = timestamp
         self.value = value
+    }
+}
+
+struct AlertEvent: Codable, Identifiable {
+    let id: UUID
+    let timestamp: Date
+    let voltage: Double
+    let minVoltage: Double
+    let maxVoltage: Double
+    let unit: String
+    let name: String
+
+    var isBelowMin: Bool { voltage < minVoltage }
+    var isAboveMax: Bool { voltage > maxVoltage }
+
+    init(timestamp: Date = Date(), voltage: Double, minVoltage: Double, maxVoltage: Double, unit: String, name: String) {
+        self.id = UUID()
+        self.timestamp = timestamp
+        self.voltage = voltage
+        self.minVoltage = minVoltage
+        self.maxVoltage = maxVoltage
+        self.unit = unit
+        self.name = name
     }
 }
 

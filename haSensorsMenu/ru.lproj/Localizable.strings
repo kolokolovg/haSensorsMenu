@@ -87,14 +87,25 @@
 "min_voltage" = "Мин. напряжение (В)";
 "max_voltage" = "Макс. напряжение (В)";
 "enable_alerts" = "Включить оповещения";
+"alert_history_retention" = "Хранить историю (дней)";
+"days" = "дн.";
 
 // Voltage Graph
 "voltage_history" = "История напряжения (1ч)";
-"voltage_legend" = "Напряжение";
+"voltage_range" = "Диапазон:";
 "no_voltage_data" = "Нет данных по напряжению";
 
 // Notifications
 "voltage_alert_title" = "ИБП: напряжение вне нормы";
+
+// Alert History
+"alert_history" = "История алертов";
+"alert_history_title" = "История срабатываний";
+"clear_history" = "Очистить историю";
+"clear_history_confirm" = "Вы уверены, что хотите очистить всю историю срабатываний?";
+"no_alerts" = "Нет срабатываний";
+"alert_below_min" = "Ниже минимума";
+"alert_above_max" = "Выше максимума";
 
 // Common
 "error" = "Ошибка";
