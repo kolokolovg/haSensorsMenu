@@ -20,7 +20,7 @@ MV-ish: SwiftUI + AppKit (NSStatusItem, NSPopover).
 
 ## Конвенции
 
-- `L10n("key")` — runtime локализация (Bundle swizzling)
+- `L10n("key")` — runtime локализация (LanguageManager)
 - `@MainActor` на `HASensorStore`
 - `UserDefaults` для persistence, auto-save через Combine `dropFirst().sink`
 - Обращаться к HA через `fetchSensor(id:token:apiBaseURL:)`
@@ -30,6 +30,8 @@ MV-ish: SwiftUI + AppKit (NSStatusItem, NSPopover).
   - Unused iCloud, no CoreData
 - Alamofire отсутствует — только `URLSession`
 - GitHub token is NOT stored in code
+- `VoltageHistoryManager` — JSON-логирование в Application Support
+- Swift Charts для `VoltageGraphView`
 
 ## Файлы
 
@@ -41,11 +43,24 @@ MV-ish: SwiftUI + AppKit (NSStatusItem, NSPopover).
 | `SettingsManager.swift` | Persistence: UserDefaults + Combine auto-save |
 | `StatusBarManager.swift` | NSStatusItem (house.fill + voltage), NSPopover |
 | `NotificationManager.swift` | UNUserNotificationCenter: voltage alerts |
+| `LanguageManager.swift` | Runtime localization (L10n) |
 | `MenuContentView.swift` | SwiftUI popover layout |
 | `RoomView.swift` | Room card (compact / oneLine) |
 | `SwitchRowView.swift` | Switch toggle row |
 | `UPSSettingsView.swift` | UPS settings form |
+| `RoomsSettingsView.swift` | Room settings |
+| `AddRoomView.swift` | Add room form |
+| `EditRoomView.swift` | Edit room form |
+| `RoomRow.swift` | Room row in settings list |
+| `SwitchesSettingsView.swift` | Switch settings |
+| `ConnectionSettingsView.swift` | Connection settings |
+| `AppearanceSettingsView.swift` | Appearance settings |
+| `LanguageSettingsView.swift` | Language settings |
 | `SettingsView.swift` | Tabbed settings (connection, rooms, switches, ups, language, appearance) |
+| `VoltageGraphView.swift` | Voltage chart (Swift Charts) |
+| `VoltageHistoryManager.swift` | Voltage & alert history persistence |
+| `AlertHistoryView.swift` | Alert history window content |
+| `AlertHistoryWindowManager.swift` | NSWindow for AlertHistoryView |
 
 ## Сборка
 

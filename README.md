@@ -22,7 +22,7 @@ macOS приложение для строки меню, отображающе�
 
 ## Установка
 
-1. Скачайте последний релиз из [Releases](https://github.com/gleb/haSensorsMenu/releases)
+1. Скачайте последний релиз со страницы репозитория
 2. Перетащите `haSensorsMenu.app` в `/Applications`
 3. Запустите приложение — появится иконка в строке меню
 4. При первом запуске откроется окно настроек
@@ -68,14 +68,30 @@ macOS приложение для строки меню, отображающе�
 
 Напряжение ИБП отображается в строке меню рядом с иконкой дома и обновляется каждые 10 секунд (независимо от основного интервала опроса).
 
+#### График напряжения и история алертов
+
+Во всплывающем окне ИБП отображается график напряжения за последний час с пороговыми линиями (оранжевый пунктир), построенный на Swift Charts.
+
+Под графиком — кнопка **Alert History**, открывающая отдельное окно со списком всех событий выхода напряжения за пределы. События хранятся 7 дней в `~/Library/Application Support/haSensorsMenu/alert_history.json`.
+
+Кнопка **Clear History** внизу окна очищает историю с подтверждением.
+
 ### Стиль отображения
 
 Вкладка **Appearance** — выбор между Compact и One Line для карточек комнат. Превью обновляется в реальном времени.
 
+## Зеркала репозитория
+
+| Remote   | URL                                                |
+|----------|----------------------------------------------------|
+| `origin` | `https://github.com/kolokolovg/haSensorsMenu.git` |
+| `gitflic`| `https://gitflic.ru/kolokolovg/hasensormenu.git`  |
+| `local`  | `https://git.onlychill.ru/gleb/haSensorMenu.git`  |
+
 ## Сборка из исходников
 
 ```bash
-git clone https://github.com/gleb/haSensorsMenu.git
+git clone <любое зеркало из списка выше>
 cd haSensorsMenu
 open haSensorsMenu.xcodeproj
 ```
@@ -94,34 +110,43 @@ open haSensorsMenu.xcodeproj
 2. Локализуйте все ключи
 3. Добавьте язык в `LanguageSettingsView.swift`
 
+Runtime-локализация реализована в `LanguageManager.swift` через `L10n("key")`.
+
 ## Структура проекта
 
 ```
 haSensorsMenu/
-├── haSensorsMenu.xcodeproj/     # Проект Xcode
-├── LICENSE                      # MIT License
+├── haSensorsMenu.xcodeproj/         # Проект Xcode
+├── LICENSE                          # MIT License
 ├── README.md
 └── haSensorsMenu/
-    ├── HASensorsApp.swift       # @main точка входа
-    ├── Models.swift              # Модели данных
-    ├── HASensorStore.swift       # Сеть, опрос HA, toggle
-    ├── SettingsManager.swift     # Persistence (UserDefaults)
-    ├── StatusBarManager.swift    # Иконка и попап меню
-    ├── SettingsWindowManager.swift # Окно настроек
-    ├── BundleExtension.swift     # Runtime локализация (L10n)
-    ├── MenuContentView.swift     # Основное вью меню
-    ├── RoomView.swift            # Карточка комнаты
-    ├── SwitchRowView.swift       # Строка переключателя
-    ├── UPSSettingsView.swift     # Настройки ИБП
-    ├── NotificationManager.swift # Локальные уведомления
-    ├── RoomsSettingsView.swift   # Настройки комнат (+ Add/Edit)
-    ├── SwitchesSettingsView.swift # Настройки переключателей
-    ├── ConnectionSettingsView.swift # Настройки подключения
-    ├── AppearanceSettingsView.swift # Настройки внешнего вида
-    ├── LanguageSettingsView.swift # Настройки языка
-    ├── SettingsView.swift        # Основное вью настроек (табы)
-    ├── en.lproj/                 # Английская локализация
-    └── ru.lproj/                 # Русская локализация
+    ├── HASensorsApp.swift           # @main точка входа
+    ├── Models.swift                  # Модели данных
+    ├── HASensorStore.swift           # Сеть, опрос HA, toggle
+    ├── SettingsManager.swift         # Persistence (UserDefaults)
+    ├── StatusBarManager.swift        # Иконка и попап меню
+    ├── SettingsWindowManager.swift   # Окно настроек
+    ├── LanguageManager.swift         # Runtime локализация (L10n)
+    ├── MenuContentView.swift         # Основное вью меню
+    ├── RoomView.swift                # Карточка комнаты
+    ├── SwitchRowView.swift           # Строка переключателя
+    ├── UPSSettingsView.swift         # Настройки ИБП
+    ├── NotificationManager.swift     # Локальные уведомления
+    ├── RoomsSettingsView.swift       # Настройки комнат
+    ├── AddRoomView.swift             # Форма добавления комнаты
+    ├── EditRoomView.swift            # Форма редактирования комнаты
+    ├── RoomRow.swift                 # Строка комнаты в списке настроек
+    ├── SwitchesSettingsView.swift    # Настройки переключателей
+    ├── ConnectionSettingsView.swift  # Настройки подключения
+    ├── AppearanceSettingsView.swift  # Настройки внешнего вида
+    ├── LanguageSettingsView.swift    # Настройки языка
+    ├── SettingsView.swift            # Основное вью настроек (табы)
+    ├── VoltageGraphView.swift        # График напряжения (Swift Charts)
+    ├── VoltageHistoryManager.swift   # Сохранение истории напряжения и алертов
+    ├── AlertHistoryView.swift        # Окно истории алертов
+    ├── AlertHistoryWindowManager.swift # NSWindow для AlertHistoryView
+    ├── en.lproj/                     # Английская локализация
+    └── ru.lproj/                     # Русская локализация
 ```
 
 ## Лицензия
@@ -154,7 +179,7 @@ A macOS menu bar app that displays temperature, humidity sensors, switches and U
 
 ## Installation
 
-1. Download the latest release from [Releases](https://github.com/gleb/haSensorsMenu/releases)
+1. Download the latest release from the repository page
 2. Drag `haSensorsMenu.app` to `/Applications`
 3. Launch the app — the menu bar icon will appear
 4. The settings window opens on first launch
@@ -200,14 +225,30 @@ The **UPS** tab in settings:
 
 The voltage value is shown in the menu bar next to the house icon and updates every 10 seconds (independently from the main polling interval).
 
+#### Voltage graph and alert history
+
+The UPS popover displays a one-hour voltage graph with threshold lines (orange dashes) built with Swift Charts.
+
+Below the graph, the **Alert History** button opens a separate window listing all voltage out-of-range events. Events are stored for 7 days in `~/Library/Application Support/haSensorsMenu/alert_history.json`.
+
+Use **Clear History** at the bottom of the window to delete all alerts (with confirmation).
+
 ### Display style
 
 The **Appearance** tab lets you choose between Compact and One Line room cards. The preview updates in real time.
 
+## Repository mirrors
+
+| Remote   | URL                                                |
+|----------|----------------------------------------------------|
+| `origin` | `https://github.com/kolokolovg/haSensorsMenu.git` |
+| `gitflic`| `https://gitflic.ru/kolokolovg/hasensormenu.git`  |
+| `local`  | `https://git.onlychill.ru/gleb/haSensorMenu.git`  |
+
 ## Building from source
 
 ```bash
-git clone https://github.com/gleb/haSensorsMenu.git
+git clone <any mirror from above>
 cd haSensorsMenu
 open haSensorsMenu.xcodeproj
 ```
@@ -226,34 +267,43 @@ To add a new language:
 2. Translate all keys
 3. Add the language in `LanguageSettingsView.swift`
 
+Runtime localization is handled by `LanguageManager.swift` using `L10n("key")`.
+
 ## Project structure
 
 ```
 haSensorsMenu/
-├── haSensorsMenu.xcodeproj/     # Xcode project
-├── LICENSE                      # MIT License
+├── haSensorsMenu.xcodeproj/         # Xcode project
+├── LICENSE                          # MIT License
 ├── README.md
 └── haSensorsMenu/
-    ├── HASensorsApp.swift       # @main entry point
-    ├── Models.swift              # Data models
-    ├── HASensorStore.swift       # Networking, polling, toggle
-    ├── SettingsManager.swift     # Persistence (UserDefaults)
-    ├── StatusBarManager.swift    # Menu bar icon & popover
-    ├── SettingsWindowManager.swift # Settings window
-    ├── BundleExtension.swift     # Runtime localization (L10n)
-    ├── MenuContentView.swift     # Main popover content
-    ├── RoomView.swift            # Room card view
-    ├── SwitchRowView.swift       # Switch toggle row
-    ├── UPSSettingsView.swift     # UPS settings
-    ├── NotificationManager.swift # Local notifications
-    ├── RoomsSettingsView.swift   # Room settings (+ Add/Edit)
-    ├── SwitchesSettingsView.swift # Switch settings
-    ├── ConnectionSettingsView.swift # Connection settings
-    ├── AppearanceSettingsView.swift # Appearance settings
-    ├── LanguageSettingsView.swift # Language settings
-    ├── SettingsView.swift        # Main settings view (tabs)
-    ├── en.lproj/                 # English localization
-    └── ru.lproj/                 # Russian localization
+    ├── HASensorsApp.swift           # @main entry point
+    ├── Models.swift                  # Data models
+    ├── HASensorStore.swift           # Networking, polling, toggle
+    ├── SettingsManager.swift         # Persistence (UserDefaults)
+    ├── StatusBarManager.swift        # Menu bar icon & popover
+    ├── SettingsWindowManager.swift   # Settings window
+    ├── LanguageManager.swift         # Runtime localization (L10n)
+    ├── MenuContentView.swift         # Main popover content
+    ├── RoomView.swift                # Room card view
+    ├── SwitchRowView.swift           # Switch toggle row
+    ├── UPSSettingsView.swift         # UPS settings
+    ├── NotificationManager.swift     # Local notifications
+    ├── RoomsSettingsView.swift       # Room settings
+    ├── AddRoomView.swift             # Add room form
+    ├── EditRoomView.swift            # Edit room form
+    ├── RoomRow.swift                 # Room row in settings list
+    ├── SwitchesSettingsView.swift    # Switch settings
+    ├── ConnectionSettingsView.swift  # Connection settings
+    ├── AppearanceSettingsView.swift  # Appearance settings
+    ├── LanguageSettingsView.swift    # Language settings
+    ├── SettingsView.swift            # Main settings view (tabs)
+    ├── VoltageGraphView.swift        # Voltage chart (Swift Charts)
+    ├── VoltageHistoryManager.swift   # Voltage & alert history persistence
+    ├── AlertHistoryView.swift        # Alert history window content
+    ├── AlertHistoryWindowManager.swift # NSWindow for AlertHistoryView
+    ├── en.lproj/                     # English localization
+    └── ru.lproj/                     # Russian localization
 ```
 
 ## License
